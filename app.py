@@ -41,12 +41,13 @@ def status(uid):
     with open("store.json") as file:
         store = json.load(file)
     health = store['users'][str(uid)]
+    import random
     health = [
         [health]*5,
-        [health-10]*5,
-        [health-20]*5,
-        [health-30]*5,
-        [health-40]*5
+        [health-(random.randint(5, 15))]*5,
+        [health-(random.randint(5, 15))]*5,
+        [health-(random.randint(5, 15))]*5,
+        [health-(random.randint(5, 15))]*5
     ]
     response = make_response(jsonify({'health': health}))
     return response
