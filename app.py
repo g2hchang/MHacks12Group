@@ -28,7 +28,7 @@ def update(uid, health):
 def status(uid):
     with open("store.json") as file:
         store = json.load(file)
-    health = store['users'][str(uid)][-1]
+    health = store['users'][str(uid)]
     response = make_response(jsonify({'health': health}))
     return response
 
