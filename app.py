@@ -9,6 +9,10 @@ CORS(app)
 def home():
     return "<h1>Hullo</h1>"
 
+@app.route('/predict/<uid>')
+def predict(uid):
+    time_series = []
+
 @app.route('/update/<uid>/<health>')
 def update(uid, health):
     store = None
