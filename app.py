@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, make_response
 from flask_cors import CORS
+from datetime import datetime
 import json
+from predict import get_prediction
 
 app = Flask(__name__)
 CORS(app)
@@ -11,7 +13,7 @@ def home():
 
 @app.route('/predict/<uid>')
 def predict(uid):
-    time_series = []
+    return jsonify({'prediction': get_prediction(datetime.now())})
 
 @app.route('/update/<uid>/<health>')
 def update(uid, health):
@@ -24,7 +26,9 @@ def update(uid, health):
 
 @app.route('/status/<uid>')
 def status(uid):
-    health = 130
+    with open("store.json") as file:
+        store = json.load(file)
+    health = store['users'][str(uid)][-1]
     response = make_response(jsonify({'health': health}))
     return response
 
