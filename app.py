@@ -1,18 +1,28 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, make_response
+from flask_cors import CORS
+import json
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def home():
     return "<h1>Hullo</h1>"
 
+@app.route('/update/<uid>/<health>')
+def update(uid, health):
+    store = None
+    with open("store.json") as file:
+        store = json.load(file)
+    store['users'][uid].append(health)
+    with open("store.json", "w") as file:
+        json.dump(file, store)
+
 @app.route('/status/<uid>')
 def status(uid):
-    field = [[100, 110, 120, 120, 120],
-             [100, 110, 120, 120, 130],
-             [100, 110, 120, 130, 130],
-             [100, 110, 130, 130, 130]]
-    return jsonify({'field': field})
+    health = 130
+    response = make_response(jsonify({'health': health}))
+    return response
 
 if __name__ == '__main__':
     app.run()
