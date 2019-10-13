@@ -39,16 +39,17 @@ def update_realtime(uid, health):
 @app.route('/update/<uid>/<health>')
 def update(uid, health):
     health = squish_health(int(health))
-    df = pandas.read_json("data.json")
+    data = requests.get("https://mhacks12-c37e8.firebaseio.com/users/.json")
+    df = pandas.read_json(data.content)
     temptime = datetime.now()
     time = temptime.isoformat().replace('T', ' ')
     time = time[:time.index('.')]
     df2 = pandas.DataFrame([[time, health]],  columns=['ds', 'y'])
     df = df.append(df2, ignore_index = True)
-    df.to_json("data.json")
+    df.to_json("data2.json")
     ################################################################################
     # FIREBASE
-    with open("data.json") as f:
+    with open("data2.json") as f:
         content = json.load(f)
 
     url = "https://mhacks12-c37e8.firebaseio.com/users/.json"
@@ -79,10 +80,10 @@ def status(uid):
     import random
     health_matrix = [
         [health]*5,
-        [health-(random.randint(5, 15))]*5,
-        [health-(random.randint(5, 15))]*5,
-        [health-(random.randint(5, 15))]*5,
-        [health-(random.randint(5, 15))]*5
+        [max(health-(random.randint(5, 15)), 0)]*5,
+        [max(health-(random.randint(5, 15)), 0)]*5,
+        [max(health-(random.randint(5, 15)), 0)]*5,
+        [max(health-(random.randint(5, 15)), 0)]*5
     ]
     # 5x5
     # [1,1,1,1,1]
@@ -98,7 +99,7 @@ def status(uid):
                 health_matrix[row][col] = health
             else:
                 euclidean_distance = (row - sensor_y)**2 + (col - sensor_x)**2
-                health_matrix[row][col] = health - 3*euclidean_distance
+                health_matrix[row][col] = max(health - 3*euclidean_distance, 0)
 
     response = make_response(jsonify({'health': health_matrix}))
     return response

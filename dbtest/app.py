@@ -23,23 +23,11 @@ app = Flask(__name__)
 @app.route("/")
 def hello():
     url = "https://mhacks12-c37e8.firebaseio.com/users/.json"
-    '''
-    payload = {
-            "3": {
-                "timestamps": ["2019-10-12 08:00:00"],
-                "health_scores": [400]
-            },
-            "4": {
-                "timestamps": ["2019-10-12 08:00:00"],
-                "health_scores": [400]
-            }
-    }
-    '''
+
     store = None
     with open("store.json") as file:
         store = json.load(file)
-    import pdb; pdb.set_trace()
-    #key = frozenset(store.items())
+
     payload = json.dumps(store)
 
     headers = {
@@ -55,7 +43,6 @@ def hello():
         'cache-control': "no-cache"
         }
 
-    #response = requests.request("POST", url, data=payload, headers=headers)
     response = requests.post(url, json = payload, headers=headers)
 
 

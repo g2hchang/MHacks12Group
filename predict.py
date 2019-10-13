@@ -12,7 +12,9 @@ def get_prediction(timestamp, predict = True):
     forecast = pandas.read_json('forecast.json')
     if predict:
         data = requests.get("https://mhacks12-c37e8.firebaseio.com/users/.json")
+
         df = pandas.read_json(data.content)
+        #df = pandas.read_csv("data2.csv")
         m = fbprophet.Prophet()
         m.fit(df)
         future = m.make_future_dataframe(periods=per, freq="H")
@@ -34,23 +36,22 @@ def get_prediction(timestamp, predict = True):
         if health < THRESHOLD:
             return hour
 
-if __name__ == '__main__':
-    get_prediction(datetime.now())
-    pass
-
 import random
 data = [["ds", "y"]]
 for date in ("07", "08", "09", "10", "11"):
-    health = 200
+    health = 95
     for hour in ("00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"):
         data.append(["2019-10-" + date + " " + hour + ":00:00", health])
-        health -= random.randrange(3, 7)
-with open("data.csv", "w") as f:
+        health -= random.randrange(1, 5)
+
+with open("data2.csv", "w") as f:
     writer = csv.writer(f)
     writer.writerows(data)
 
 
-
+if __name__ == '__main__':
+    get_prediction(datetime.now())
+    pass
 
 
 
