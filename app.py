@@ -101,9 +101,9 @@ def status(uid):
                 euclidean_distance = (row - sensor_y)**2 + (col - sensor_x)**2
                 health_matrix[row][col] = max(health - 3*euclidean_distance, 0)
     global counter
-    if counter == 0:
-        health_matrix[-1][-1] = 100
-        counter += 1
+    #if counter == 0:
+    health_matrix[-1][-1] = 100
+    counter += 1
     response = make_response(jsonify({'health': health_matrix}))
     return response
 
