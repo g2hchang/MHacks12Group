@@ -1,0 +1,25 @@
+{
+	"main": "dist/index.js",
+	"devDependencies": {
+		"@types/react": "^16.0.31"
+	},
+	"peerDependencies": {
+		"framer": "^1",
+		"react": "^16.3.0",
+		"react-dom": "^16.3.0"
+	},
+	"framer": {
+		"displayName": "Web UI Kit",
+		"id": "6e8f8e67-2199-47d9-92db-2c3a641251bc"
+	},
+	"keywords": [
+		"web",
+		"kit",
+		"destop",
+		"ui"
+	],
+	"author": "Edoardo Mercati",
+	"license": "MIT",
+	"name": "@framer/edoardo.web-ui-kit",
+	"version": "1.1.0"
+}
