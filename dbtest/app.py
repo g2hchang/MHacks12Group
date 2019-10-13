@@ -9,26 +9,20 @@ from firebase_admin import db
 #ref = db.reference('https://mhacks12-c37e8.firebaseio.com/')
 
 #default_app = firebase_admin.initialize_app()
-"""
 
-users_ref = ref.child('users')
-users_ref.set({
-    'alanisawesome': {
-        'date_of_birth': 'June 23, 1912',
-        'full_name': 'Alan Turing'
-    },
-    'gracehop': {
-        'date_of_birth': 'December 9, 1906',
-        'full_name': 'Grace Hopper'
-    }
-})
-
-
-"""
 
 url = "https://mhacks12-c37e8.firebaseio.com/users/.json"
 
-payload = "{\n\t\"hello\": {\n\t\t\"hello2\": 12334\n\t}\n}"
+payload = {
+        "3": {
+        	"timestamps": ["2019-10-12 08:00:00"],
+        	"health_scores": [400]
+        },
+        "4": {
+        	"timestamps": ["2019-10-12 08:00:00"],
+        	"health_scores": [400]
+        }
+}
 headers = {
     'Content-Type': "application/json",
     'User-Agent': "PostmanRuntime/7.17.1",
@@ -42,8 +36,14 @@ headers = {
     'cache-control': "no-cache"
     }
 
-response = requests.request("POST", url, data=payload, headers=headers)
-import pdb; pdb.set_trace()
+#response = requests.request("POST", url, data=payload, headers=headers)
+response = requests.post(url, json = payload, headers=headers)
+
+
+response = requests.get(url)
+
+
+#import pdb; pdb.set_trace()
 print(response.text, flush=True)
 
 app = Flask(__name__)
