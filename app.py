@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, make_response
+import requests
 from flask_cors import CORS
 from datetime import datetime
 import json, pandas
@@ -38,12 +39,6 @@ def update_realtime(uid, health):
 @app.route('/update/<uid>/<health>')
 def update(uid, health):
     health = squish_health(int(health))
-    store = None
-    with open("store.json") as file:
-        store = json.load(file)
-    store["users"][uid].append(int(health))
-    with open("store.json", "w") as file:
-        json.dump(store, file)
     df = pandas.read_json("data.json")
     temptime = datetime.now()
     time = temptime.isoformat().replace('T', ' ')
@@ -51,6 +46,28 @@ def update(uid, health):
     df2 = pandas.DataFrame([[time, health]],  columns=['ds', 'y'])
     df = df.append(df2, ignore_index = True)
     df.to_json("data.json")
+    ################################################################################
+    # FIREBASE
+    with open("data.json") as f:
+        content = json.load(f)
+
+    url = "https://mhacks12-c37e8.firebaseio.com/users/.json"
+    payload = content
+    headers = {
+        'Content-Type': "application/json",
+        'User-Agent': "PostmanRuntime/7.17.1",
+        'Accept': "*/*",
+        'Cache-Control': "no-cache",
+        'Postman-Token': "e7e1ce3d-c916-44fa-b94b-1b61bd6cb630,baf09016-fb5f-4fe6-899a-d1c0615ba294",
+        'Host': "mhacks12-c37e8.firebaseio.com",
+        'Accept-Encoding': "gzip, deflate",
+        'Content-Length': "36",
+        'Connection': "keep-alive",
+        'cache-control': "no-cache"
+    }
+
+    # response = requests.request("POST", url, data=payload, headers=headers)
+    response = requests.put(url, json=payload, headers=headers)
     return make_response(jsonify({}))
 
 

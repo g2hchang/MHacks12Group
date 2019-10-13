@@ -1,5 +1,6 @@
 import fbprophet
 import pandas
+import requests
 import matplotlib.pyplot as plt
 import csv
 from datetime import datetime, timedelta
@@ -10,7 +11,8 @@ per = 120
 def get_prediction(timestamp, predict = True):
     forecast = pandas.read_json('forecast.json')
     if predict:
-        df = pandas.read_json('data.json')
+        data = requests.get("https://mhacks12-c37e8.firebaseio.com/users/.json")
+        df = pandas.read_json(data.content)
         m = fbprophet.Prophet()
         m.fit(df)
         future = m.make_future_dataframe(periods=per, freq="H")
