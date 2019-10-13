@@ -7,7 +7,7 @@ from predict import get_prediction
 
 app = Flask(__name__)
 CORS(app)
-
+counter = 0
 
 @app.route('/')
 def home():
@@ -100,7 +100,10 @@ def status(uid):
             else:
                 euclidean_distance = (row - sensor_y)**2 + (col - sensor_x)**2
                 health_matrix[row][col] = max(health - 3*euclidean_distance, 0)
-
+    global counter
+    if counter == 0:
+        health_matrix[-1][-1] = 100
+        counter += 1
     response = make_response(jsonify({'health': health_matrix}))
     return response
 
