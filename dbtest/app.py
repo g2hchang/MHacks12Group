@@ -2,6 +2,30 @@ from flask import Flask
 
 import requests
 
+# Import database module.
+from firebase_admin import db
+
+# Get a database reference to our blog.
+#ref = db.reference('https://mhacks12-c37e8.firebaseio.com/')
+
+#default_app = firebase_admin.initialize_app()
+"""
+
+users_ref = ref.child('users')
+users_ref.set({
+    'alanisawesome': {
+        'date_of_birth': 'June 23, 1912',
+        'full_name': 'Alan Turing'
+    },
+    'gracehop': {
+        'date_of_birth': 'December 9, 1906',
+        'full_name': 'Grace Hopper'
+    }
+})
+
+
+"""
+
 url = "https://mhacks12-c37e8.firebaseio.com/users/.json"
 
 payload = "{\n\t\"hello\": {\n\t\t\"hello2\": 12334\n\t}\n}"
@@ -19,15 +43,23 @@ headers = {
     }
 
 response = requests.request("POST", url, data=payload, headers=headers)
-
-print(response.text)
+import pdb; pdb.set_trace()
+print(response.text, flush=True)
 
 app = Flask(__name__)
+
+
+
+
 
 @app.route("/")
 def hello():
     return "Hello World!"
-#import pdb; pdb.set_trace()
+
+
+
+
+
 
 
 #end
